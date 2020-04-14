@@ -4,6 +4,89 @@ const contractABI=[
 		"inputs": [
 			{
 				"internalType": "string",
+				"name": "_recordHash",
+				"type": "string"
+			}
+		],
+		"name": "addRecord",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "addUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "allowAccessToResearch",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "allowAccessToUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amt",
+				"type": "uint256"
+			}
+		],
+		"name": "billUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_campaignData",
+				"type": "string"
+			}
+		],
+		"name": "createCampaign",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
 				"name": "_orgName",
 				"type": "string"
 			},
@@ -57,6 +140,60 @@ const contractABI=[
 		"outputs": [],
 		"payable": true,
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "donateToUser",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_userName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_location",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_file",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			}
+		],
+		"name": "fileReport",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "revokeAccessToResearch",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -170,6 +307,42 @@ const contractABI=[
 	{
 		"constant": true,
 		"inputs": [],
+		"name": "campaignCnt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "Campaigns",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
 		"name": "fundCnt",
 		"outputs": [
 			{
@@ -231,6 +404,42 @@ const contractABI=[
 	{
 		"constant": true,
 		"inputs": [],
+		"name": "getAccessors",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getRecords",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "records",
+				"type": "string[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
 		"name": "getTaskCount",
 		"outputs": [
 			{
@@ -281,6 +490,21 @@ const contractABI=[
 	},
 	{
 		"constant": true,
+		"inputs": [],
+		"name": "reportCnt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -288,7 +512,48 @@ const contractABI=[
 				"type": "uint256"
 			}
 		],
-		"name": "SentinelTasks",
+		"name": "Reports",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "userName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "location",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "file",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "details",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "SaarthiTasks",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -347,6 +612,72 @@ const contractABI=[
 	},
 	{
 		"constant": true,
+		"inputs": [],
+		"name": "UserCnt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "Users",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "recordHistoryCnt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "billAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "donationCnt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "hasCampaign",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "campaignData",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "hasAllowedResearch",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -372,7 +703,7 @@ const contractABI=[
 		"type": "function"
 	}
 ];
-const contractAddress = "0x62C281318746C24d4C97660b8478bD8987B73550".toLowerCase();
+const contractAddress = "0x98de1988553bf05400bFa379675c6bad1cF93284".toLowerCase();
 
 const COORDINATOR_NODE = "https://saarthi-coor.herokuapp.com/";
 const TESTER_NODE = "https://saarthi-tester.herokuapp.com/";

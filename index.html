@@ -55,7 +55,7 @@
                 <img class="navbar-pic" src="icons/favicon.png" alt="Saarthi Icon">
               </div>
               <div class="navbar-group">
-                <div class="navbar-title">Aapka Saarthi</div>
+                <div class="navbar-title">Aaapka Saarthi</div>
               </div>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,16 +64,151 @@
             <div class="collapse navbar-collapse" id="navbarDropdown">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/dashboard.html">Contribute</a>
+                  <a class="nav-link nav-link-drop" href="#">
+                    <span>Translate</span>
+                    <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
+                      <polygon points=".94 0 4 3.09 7.06 0 8 .951 4 5 0 .951" />
+                    </svg>
+                  </a>
+                  <div class="nav-drop">
+                    <div class="row" style="cursor: pointer;">
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-english" onClick="window.location.reload()">
+                          <div class="nav-title">English</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-hindi" onClick="translatePage('hi')">
+                          <div class="nav-title">हिंदी</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-bengali" onClick="translatePage('bn')">
+                          <div class="nav-title">বাঙ্গালী</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-marathi" onClick="translatePage('mr')">
+                          <div class="nav-title">मराठी</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-gujarati" onClick="translatePage('gu')">
+                          <div class="nav-title">ગુજરાતી</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-malayalam" onClick="translatePage('ml')">
+                          <div class="nav-title" >മലയാളം</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-punjabi" onClick="translatePage('pa')">
+                          <div class="nav-title">ਪੰਜਾਬੀ</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-tamil" onClick="translatePage('ta')">
+                          <div class="nav-title">தமிழ்</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-telugu" onClick="translatePage('te')">
+                          <div class="nav-title">తెలుగు</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-urdu" onClick="translatePage('ur')">
+                          <div class="nav-title">اردو</div>
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a class="nav-group" id="t-arabic" onClick="translatePage('ar')">
+                          <div class="nav-title">عربى</div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/dashboard.html">Check Your Symptoms</a>
+                  <a class="nav-link nav-link-drop" href="#">
+                    <span>Donate & Contribute</span>
+                    <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
+                      <polygon points=".94 0 4 3.09 7.06 0 8 .951 4 5 0 .951" />
+                    </svg>
+                  </a>
+                  <div class="nav-drop">
+                    <div class="row">
+
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/donate-fund.html">
+                          <div class="nav-title">Donate to a Relief Fund</div>
+                          <div class="nav-text">Provide Hostipals with monetory relief directly, to help combat this pandemic.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/donate-campaign.html">
+                          <div class="nav-title">Donate to a Campaign</div>
+                          <div class="nav-text">Provide Hostipals with monetory relief directly, to help combat this pandemic.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="https://github.com/aapkasaarthi/node" target="_blank">
+                          <div class="nav-title">Contribute Resources</div>
+                          <div class="nav-text">Contribute spare computing power or datasets towards research.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/contributors.html">
+                          <div class="nav-title">View Contributors</div>
+                          <div class="nav-text">View the devices connected to the network, helping power Saarthi.</div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link nav-link-drop" href="#">
+                    <span>Medical Help</span>
+                    <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
+                      <polygon points=".94 0 4 3.09 7.06 0 8 .951 4 5 0 .951" />
+                    </svg>
+                  </a>
+                  <div class="nav-drop">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/store.html">
+                          <div class="nav-title">Store Medical Records</div>
+                          <div class="nav-text">Provide Hostipals with monetory relief directly, to help combat this pandemic.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/medical-history.html">
+                          <div class="nav-title">View Medical History</div>
+                          <div class="nav-text">Provide Hostipals with monetory relief directly, to help combat this pandemic.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/reports.html">
+                          <div class="nav-title">View Recent Reports</div>
+                          <div class="nav-text">View live anonymous reports across the globe.</div>
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="nav-group" href="/donate.html">
+                          <div class="nav-title">Contribute towards Research</div>
+                          <div class="nav-text">Provide Hostipals with monetory relief directly, to help combat this pandemic.</div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
           </nav>
         </div>
       </header>
+
 
       <div class="inner">
         <div class="section section-main" style="background: #77EEDF">
