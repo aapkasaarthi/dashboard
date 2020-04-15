@@ -423,14 +423,19 @@ const contractABI=[
 				"internalType": "address",
 				"name": "_user",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
 			}
 		],
-		"name": "getRecords",
+		"name": "getRecord",
 		"outputs": [
 			{
-				"internalType": "string[]",
+				"internalType": "string",
 				"name": "records",
-				"type": "string[]"
+				"type": "string"
 			}
 		],
 		"payable": false,
@@ -703,7 +708,7 @@ const contractABI=[
 		"type": "function"
 	}
 ];
-const contractAddress = "0x98de1988553bf05400bFa379675c6bad1cF93284".toLowerCase();
+const contractAddress = "0x75D173A389a58Af8AFa3294441279Aa55F296bF4".toLowerCase();
 
 const COORDINATOR_NODE = "https://saarthi-coor.herokuapp.com/";
 const TESTER_NODE = "https://saarthi-tester.herokuapp.com/";

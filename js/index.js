@@ -5,6 +5,8 @@ window.addEventListener('load', async () => {
 
     if (window.ethereum) {
 
+        ethereum.autoRefreshOnNetworkChange = false;
+
         window.web3 = new Web3(ethereum);
         try {
                 await ethereum.enable();
