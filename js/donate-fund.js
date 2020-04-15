@@ -91,10 +91,8 @@ async function donate(_orgID) {
 
     let promise = new Promise((res, rej) => {
 
-        const txParams = {
-            value: web3.toWei(0.01, 'ether')
-        }
-        Saarthi.donateToFund(parseInt(_orgID), txParams,function(error, result) {
+        let donationValue = parseFloat(document.getElementById(`donationAmount${_orgID}`).value);
+        Saarthi.donateToFund(parseInt(_orgID), {value: web3.toWei(donationValue, 'ether')},function(error, result) {
             if (!error)
                 res(result);
             else{

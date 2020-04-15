@@ -240,26 +240,56 @@
                 <div class="row">
                     <div class="col-md-6 mb-5 mb-lg-0">
                       <div class="wrap">
-                        <div class="theme darkmode-ignore" style="color: #0189D1">Let's Get Started.</div>
-                        <div class="title title-2">Just drop your file here.</div>
+                        <div class="theme darkmode-ignore" style="color: #0189D1">File a Report.</div>
+                        <div class="title title-2">Enter Details</div>
                         <div class="text">
-                          Nobody else other than the ones you allow can ever view these files.
+                          You remain completely anonymous.
+                        </div>
+                        <div class="row form-group" style="max-width: 500px;margin: 0px;">
+                            <input class="form-control" type="text" placeholder="From ( Paper Clip 📎 )" required="" name="from" id="from">
+                        </div>
+                        <br/>
+                        <div class="row form-group" style="max-width: 500px;margin: 0px; ">
+                            <input class="form-control" type="text" placeholder="Enter Location" required="" name="location" id="location" style=" width: fit-content; margin-right: 10px; ">
+                            <button class="btn btn-primary" onclick="pickupCurrent()">Pick Current 📍</button>
+                        </div>
+                        <br/>
+                        <form>
+                          <input type="file" name="ipfsFile" id="ipfsFile"  />
+                        </form>
+                        <br />
+                        <div class="row form-group" style="max-width: 500px;margin: 0px;" id="details">
+                            <input class="form-control" type="text" placeholder="Details" required="" name="details" style="height: 100px;">
+                        </div>
+                        <br/><br/>
+                        <div class="row form-group" style="max-width: 500px;margin: 0px;" >
+                            <button class="btn btn-primary" onclick="submitReport()">Submit Report ✔</button>
                         </div>
 
-                        <form>
-                            <input type="file" name="ipfsFile" id="ipfsFile"  />
-                            <br /><br /><br />
-                        </form>
-                        <div class="theme" style="color: #0189D1">Allowed</div>
-                        <div class="text">
-                          These are the people you've given access to your files.
-                        </div>
-                        <div class="vacancy" id="allowed"></div>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div class="theme" style="color: #0189D1" id="tasksTitle">Here are your stored files.</div>
-                      <div class="vacancy" id="fileList"></div>
+                      <div class="theme" style="color: #0189D1">Recent Reports</div>
+                      <div class="vacancy" id="fileList" style=" max-height: 70vh; overflow: auto; overflow-x: hidden; ">
+                        <div class="row" id="fundList">
+                            <div class="card" style="margin: 30px;">
+                                <div class="title title-4">
+                                    <a target="_blank" href="https://betav2-explorer.matic.network/address/0xbeb71662ff9c08afef3866f85a6591d4aebe6e4e">
+                                        Anonymous
+                                    </a>
+                                </div>
+                                <a>
+                                    <div class="card-text">
+                                        Shorthand property to set values the thickness of the margin area. If left is omitted, it is the same as right. If bottom is omitted it is the same as top<br><br>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="donate(1)" style="width:100%;">View on Map 🗺</button>
+                                    <br/><br/>
+                                    <button class="btn btn-primary" onclick="viewReport(1)" style="width:100%;">View Report 🕵️‍♀️</button>
+                                </a>
+                            </div>
+                        </div>
+
+                      </div>
 
                       <!-- <figure class="preview" style="display: none;" id="noTasks">
                         <img class="preview-pic" src="img/landing/nomodels.png" style="max-height: 400px;">
@@ -280,7 +310,7 @@
       <script src="js/saarthi.js"></script>
 
       <script src="js/globals.js"></script>
-      <script src="js/store.js"></script>
+      <script src="js/report.js"></script>
       <script src="js/index.js"></script>
 
     </body>
