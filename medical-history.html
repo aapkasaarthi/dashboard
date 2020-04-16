@@ -55,7 +55,7 @@
                   <img class="navbar-pic" src="icons/favicon.png" alt="Saarthi Icon">
                 </div>
                 <div class="navbar-group">
-                  <div class="navbar-title">Aaapka Saarthi</div>
+                  <div class="navbar-title">Aapka Saarthi</div>
                 </div>
               </a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -190,8 +190,8 @@
                         </div>
                         <div class="col-md-6">
                           <a class="nav-group" href="/reports.html">
-                            <div class="nav-title">View Recent Reports</div>
-                            <div class="nav-text">View live anonymous reports across the globe.</div>
+                            <div class="nav-title">Anonymous Reports</div>
+                            <div class="nav-text">View live anonymous whistleblower reports across the globe safeguarded by Ethereum</div>
                           </a>
                         </div>
                         <div class="col-md-6">
@@ -243,25 +243,30 @@
                       <div class="wrap">
                         <div class="theme" style="color: #0189D1">Let's Get Started.</div>
                         <div class="title title-2">Medical Dashboard</div>
-                        <button class="btn btn-primary" type="submit">Start Campaign 💪</button>
-                        <button class="btn btn-primary" type="submit">Stop Campaign ❌</button>
+                        <div class="row form-group" style="max-width: 500px;margin: 0px;" >
+                            <input class="form-control" type="text" placeholder="Campaign Details" required="" name="campDetails" id="campDetails" style="height: 100px;">
+                        </div>
+                        <br/>
+                        <button class="btn btn-primary" id="campStart">Start Campaign 💪</button>
+                        <button class="btn btn-primary" id="campStop">Stop Campaign ❌</button>
+                        <br/><br/>
                         <div class="theme" style="color: #0189D1">Stored Records</div>
-
+                        <div class="vacancy" id="fileList"></div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="theme" style="color: #0189D1">Your Wallet</div>
-                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);" onclick="window.location='/donate.html'">
+                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);">
                         <div class="title title-3"><span id="medicalDues">0</span> ETH</div>
                         <div class="card-text">Here is how much you owe towards Medical Dues 🏥</div>
                       </div>
                       <br/>
-                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right, #e3fd7a, #dde786, #f4ff4e);" onclick="window.location='/donate.html'">
+                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right, #e3fd7a, #dde786, #f4ff4e);">
                         <div class="title title-3"><span id="campaignStatus">Disabled</div>
                         <div class="card-text">Here is your Campaign Status.</div>
                       </div>
                       <br/>
-                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right,#86f56b, #52dc83, #91ea98);" onclick="window.location='/donate.html'">
+                      <div class="card" style="cursor:pointer;min-height: fit-content !important;  background: linear-gradient(to right,#86f56b, #52dc83, #91ea98);">
                         <div class="title title-3"><span id="donationsReceived">0</span> ETH</div>
                         <div class="card-text">Here is the amount of donations received via your Campaign</div>
                       </div>
