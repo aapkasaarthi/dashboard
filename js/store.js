@@ -79,12 +79,13 @@ async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount)
     return result;
 }
 
-async function getStoredFiles(_userAddress = web3.eth.defaultAccount, _index = 0) {
+async function getStoredFiles(_userAddress = web3.eth.defaultAccount) {
 
     let promise = new Promise(async (res, rej) => {
 
-        const fileCnt = 0;
-        let resp =[];
+        const userData = await getUserData(_userAddress);
+        const fileCnt = userData['recordHistoryCnt'];
+        let resp = [];
         for (var i=0;i<fileCnt;i++){
             let data = await getStoredFile(i);
             resp.push(data);

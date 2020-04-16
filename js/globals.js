@@ -1,4 +1,4 @@
-const contractABI=[
+const contractABI = [
 	{
 		"constant": false,
 		"inputs": [
@@ -50,11 +50,6 @@ const contractABI=[
 	{
 		"constant": false,
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_user",
-				"type": "address"
-			},
 			{
 				"internalType": "uint256",
 				"name": "_amt",
@@ -191,6 +186,15 @@ const contractABI=[
 		"constant": false,
 		"inputs": [],
 		"name": "revokeAccessToResearch",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "stopCampaign",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -410,6 +414,48 @@ const contractABI=[
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getDonationAddresses",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "donationAddresses",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getDonationAmounts",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "donationAmounts",
+				"type": "uint256[]"
 			}
 		],
 		"payable": false,
@@ -708,7 +754,7 @@ const contractABI=[
 		"type": "function"
 	}
 ];
-const contractAddress = "0x75D173A389a58Af8AFa3294441279Aa55F296bF4".toLowerCase();
+const contractAddress = "0x84AB5FA40f99141092489E97334bA3aE95Ce0128".toLowerCase();
 
 const COORDINATOR_NODE = "https://saarthi-coor.herokuapp.com/";
 const TESTER_NODE = "https://saarthi-tester.herokuapp.com/";
