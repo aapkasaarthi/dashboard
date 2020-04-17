@@ -13,10 +13,12 @@ async function init() {
 }
 
 async function refreshUI(){
-    showStoredFiles();
+    showQR();
 
     let {billAmount, hasCampaign} = await getUserData();
     document.getElementById("medicalDues").innerText = billAmount;
+    let donationAmt = await getDonationAmount();
+    document.getElementById("donationsReceived").innerText = donationAmt;
     if (hasCampaign == true){
         document.getElementById("campaignStatus").innerHTML = "Enabled"
         document.getElementById("campDetails").remove()
@@ -53,8 +55,29 @@ async function getUserData(_userAddress = web3.eth.defaultAccount) {
         'campaignData':result[5],
         'hasAllowedResearch':result[6],
     }
-    console.log(dict);
+    // console.log(dict);
     return dict;
+}
+
+async function getDonationAmount(_userAddress = web3.eth.defaultAccount) {
+
+    let promise = new Promise((res, rej) => {
+
+        Saarthi.getDonationAmounts(_userAddress, function(error, result) {
+            if (!error)
+                res(result);
+            else{
+                rej(false);
+            }
+        });
+
+    });
+    let results = await promise;
+    let sum = 0;
+    results.forEach((amount) =>{
+        sum+= parseFloat(web3.fromWei(amount))
+    });
+    return parseFloat(sum).toFixed(2);
 }
 
 async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount) {
@@ -74,45 +97,13 @@ async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount)
     return result;
 }
 
-async function getStoredFiles(_userAddress = web3.eth.defaultAccount) {
-
-    let promise = new Promise(async (res, rej) => {
-
-        const userData = await getUserData(_userAddress);
-        const fileCnt = userData['recordHistoryCnt'];
-        let resp = [];
-        for (var i=0;i<fileCnt;i++){
-            let data = await getStoredFile(i);
-            resp.push(data);
-        }
-        res(resp);
-
+async function showQR(){
+    var qrcode = new QRCode("qrcode", {
+        text: web3.eth.accounts[0],
+        width: 256,
+        height: 256,
+        colorDark : "#63f363",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
     });
-    let result = await promise;
-    return result;
-}
-
-async function showStoredFiles(){
-
-    const getHtml = (title = "", text = "", data) => {
-        return `
-        <a class='vacancy-item' href="https://gateway.ipfs.io/ipfs/${data}"> \
-        <div class='vacancy-title'>${title}</div> \
-        <div class='vacancy-text'>${text}</div> \
-        <div class='vacancy-arrow'> \
-        <svg xmlns='http://www.w3.org/2000/svg' width='8' height='12' viewBox='0 0 8 12'> \
-            <polygon points='0 10.59 4.58 6 0 1.41 1.41 0 7.41 6 1.41 12'></polygon> \
-        </svg> \
-        </div> \
-        </a> \
-        `
-    };
-
-    let nodeListElement = document.getElementById('fileList');
-    const fileList = await getStoredFiles();
-    console.log(fileList);
-    fileList.forEach((file)=>{
-        nodeListElement.innerHTML += getHtml(trimhash(file.hash),'Click to download', file.hash);
-    });
-
 }
