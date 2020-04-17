@@ -11,13 +11,13 @@ async function init() {
     })
 
     refreshUI();
-    setInterval(updateStats, 10000);
+    setInterval(updateStats, 60000);
 }
 
 async function updateStats(){
     document.getElementById('totDon').innerText = await getDonationAmount();
 
-    fetch('https://corona.lmao.ninja/all')
+    fetch('https://corona.lmao.ninja/v2/countries/india')
     .then((response) => {
         return response.json();
     })

@@ -107,3 +107,39 @@ async function showQR(){
         correctLevel : QRCode.CorrectLevel.H
     });
 }
+
+
+async function startCampaign() {
+
+    let promise = new Promise((res, rej) => {
+        let data = document.getElementById('campDetails').value;
+        Saarthi.createCampaign(data, function(error, result) {
+            if (!error)
+                res(result);
+            else{
+                rej(error);
+            }
+        });
+
+    });
+    let result = await promise;
+    return result;
+}
+
+
+async function stopCampaign() {
+
+    let promise = new Promise((res, rej) => {
+
+        Saarthi.stopCampaign(function(error, result) {
+            if (!error)
+                res(result);
+            else{
+                rej(error);
+            }
+        });
+
+    });
+    let result = await promise;
+    return result;
+}

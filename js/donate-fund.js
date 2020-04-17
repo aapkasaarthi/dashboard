@@ -39,7 +39,6 @@ async function getFundDetails() {
     let promise = new Promise(async (res, rej) => {
 
         const fundCnt = await getFundCnt();
-        const Funds = [];
         for (var i=0;i<fundCnt;i++){
             Saarthi.Funds(i,function(error, result) {
                 if (!error){
@@ -77,8 +76,7 @@ async function getFundDetails() {
                 }
             });
         }
-
-        res(Funds);
+        res(true);
 
     });
 
