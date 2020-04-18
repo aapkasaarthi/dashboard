@@ -1,13 +1,97 @@
-SaarthiContract = undefined;
-Saarthi = undefined;
+let SaarthiContract = undefined;
+let Saarthi = undefined;
+
+const Web3Modal = window.Web3Modal.default;
+const Fortmatic = window.Fortmatic;
+const Torus = window.torus;
+
+let web3Modal
+let provider;
+let selectedAccount;
 
 window.addEventListener('load', async () => {
 
-    if (window.ethereum) {
+    console.log("Initializing Providers...");
+    console.log("Fortmatic is", Fortmatic);
+    console.log("Torus is", Torus);
+
+    const providerOptions = {
+
+        fortmatic: {
+          package: Fortmatic,
+          options: {
+            key: "pk_test_391E26A3B43A3350",
+            config: {
+              rpcUrl: 'https://betav2.matic.network',
+              chainId: 16110
+            }
+
+          }
+        },
+
+        torus: {
+          package: Torus,
+          options: {
+            config: {
+              network: {
+                  host: "https://betav2.matic.network",
+                  chainId: 16110,
+                  networkName: "Matic Network"
+              },
+              enableLogging: true,
+              buttonPosition: "bottom-left",
+              buildEnv: "production",
+              showTorusButton: true,
+              enabledVerifiers: {
+              }
+            }
+          }
+        }
+    };
+
+    web3Modal = new Web3Modal({
+        theme: "dark",
+        cacheProvider: true,
+        providerOptions,
+    });
+
+    if (web3Modal.cachedProvider == "") {
+        provider = await web3Modal.connect();
+        console.log("provider is");
+        console.log(provider);
+    }
+    else{
+        await web3Modal.connect();
+    }
+
+    if (typeof window.ethereum !== 'undefined') {
 
         ethereum.autoRefreshOnNetworkChange = false;
+        ethereum.on('accountsChanged', function (accounts) {
+            window.location.reload();
+        })
 
-        window.web3 = new Web3(ethereum);
+        ethereum.on('chainChanged', function (netId) {
+            if(netId != 16110){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Warning ⚠ - Wrong Network',
+                    html: `Please switch to https://betav2.matic.network`
+                });
+            }
+        })
+
+        if (provider){
+            window.web3 = new Web3(provider);
+            console.log("set provider is")
+            console.log(provider)
+
+        }else{
+            window.web3 = new Web3(ethereum);
+            console.log("set provider is")
+            console.log(ethereum)
+        }
+
         try {
                 await ethereum.enable();
 
@@ -17,7 +101,7 @@ window.addEventListener('load', async () => {
                     if(netId != 16110){
                         Swal.fire({
                             icon: 'error',
-                            title: 'Wrong Network',
+                            title: 'Warning ⚠ - Wrong Network',
                             html: `Please switch to https://betav2.matic.network`
                         });
                     }
@@ -26,7 +110,7 @@ window.addEventListener('load', async () => {
                 SaarthiContract = web3.eth.contract(contractABI);
                 Saarthi = SaarthiContract.at(contractAddress);
 
-                init();
+                await init();
 
         } catch (error) {
                 Swal.fire({
@@ -44,7 +128,7 @@ window.addEventListener('load', async () => {
             if(netId != 16110){
                 Swal.fire({
                     icon: 'error',
-                    title: 'Wrong Network',
+                    title: 'Warning ⚠ - Wrong Network',
                     html: `Please switch to https://betav2.matic.network`
                 });
             }
@@ -112,4 +196,9 @@ var addCommas = function(num) {
         index -= 4;
     }
     return array.join('');
+};
+
+function logout() {
+    web3Modal.clearCachedProvider();
+    window.location.reload();
 };

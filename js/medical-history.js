@@ -99,7 +99,7 @@ async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount)
 
 async function showQR(){
     var qrcode = new QRCode("qrcode", {
-        text: web3.eth.accounts[0],
+        text: ethereum.selectedAddress,
         width: 256,
         height: 256,
         colorDark : "#63f363",

@@ -212,16 +212,22 @@
                     </a>
                     <div class="nav-drop">
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <a class="nav-group" href="/store.html">
                             <div class="nav-title" id="userAddress">0x000...000</div>
                             <div class="nav-text">Your Address</div>
                           </a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <a class="nav-group" href="/store.html">
                             <div class="nav-title"id="userBalance">0.00 ETH</div>
                             <div class="nav-text">Your Balance</div>
+                          </a>
+                        </div>
+                        <div class="col-md-4">
+                          <a class="nav-group" href="#">
+                            <div class="nav-title" onclick="logout()">Logout</div>
+                            <div class="nav-text">Click to Logout</div>
                           </a>
                         </div>
                       </div>
@@ -305,6 +311,10 @@
       <script src="js/lib/jquery-3.4.1.min.js"></script>
       <script src="js/lib/bootstrap.min.js"></script>
       <script src="js/lib/sweetalert2@9.js"></script>
+
+      <script type="text/javascript" src="js/providers/web3modal.js"></script>
+      <script type="text/javascript" src="js/providers/fortmatic.js"></script>
+      <script type="text/javascript" src="js/providers/torus-embed.js"></script>
 
       <script src="js/translate.js"></script>
       <script src="js/saarthi.js"></script>

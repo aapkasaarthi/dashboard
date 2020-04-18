@@ -50,7 +50,7 @@ async function getCampaignAddress(_index = 0) {
     return result;
 }
 
-async function getCampaign(_address = web3.eth.accounts[0]) {
+async function getCampaign(_address = ethereum.selectedAddress) {
 
     let promise = new Promise((res, rej) => {
 
@@ -97,9 +97,9 @@ async function getCampaigns() {
                         </div> \
                         <div class="title title-2">${billAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;">ETH</span></div> \
                         <div class="row form-group center" style="margin: 0 0 10px;"> \
-                            <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id = "dA${userAddress}}"> \
+                            <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id = "dA${userAddress}"> \
                         </div> \
-                        <button class="btn btn-primary" onclick="donate(${userAddress})">Donate ❤️</button> \
+                        <button class="btn btn-primary" onclick="donate('${userAddress}')">Donate ❤️</button> \
                     </div> \
                 </div>`;
             }
@@ -117,11 +117,12 @@ async function getCampaigns() {
 
 }
 
-async function donate(_address=web3.eth.accounts[0]) {
+async function donate(_address) {
 
     let promise = new Promise((res, rej) => {
 
-        let donationValue = parseFloat(document.getElementById(`da${_address}`).value);
+        let donationValueEle = document.getElementById(`dA${_address}`);
+        let donationValue = parseFloat(donationValueEle.value);
         Saarthi.donateToUser(_address, {value: web3.toWei(donationValue, 'ether')},function(error, result) {
             if (!error)
                 res(result);
