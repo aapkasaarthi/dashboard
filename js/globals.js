@@ -757,4 +757,4 @@ const contractABI = [
 const contractAddress = "0x84AB5FA40f99141092489E97334bA3aE95Ce0128".toLowerCase();
 
 const COORDINATOR_NODE = "https://saarthi-coor.herokuapp.com/";
-const TESTER_NODE = "https://saarthi-tester.herokuapp.com/";
+const TESTER_NODE = "https://covidsymptomtester.herokuapp.com/";

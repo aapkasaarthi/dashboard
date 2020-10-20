@@ -31,7 +31,7 @@ async function translate(data="hello",to = "hi"){
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json','Ocp-Apim-Subscription-Key':'8983231881b64941894899aee119d310' },
+        headers: { 'Content-Type': 'application/json','Ocp-Apim-Subscription-Key':'917ed434ae7641b6b81931e85c2dae71' },
         body: JSON.stringify([{"Text":data}])
     })
     .then(async (response) => {
