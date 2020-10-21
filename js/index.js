@@ -202,3 +202,29 @@ function logout() {
     web3Modal.clearCachedProvider();
     window.location.reload();
 };
+
+function sendIPFSPinningRequests(_ipfsHash = ''){
+
+    fetch(`https://ipfs.infura.io:5001/api/v0/pin/add?arg=/ipfs/${_ipfsHash}`, {
+        method: 'POST',
+        redirect: 'follow'
+    })
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
+    var myHeaders = new Headers();
+        myHeaders.append("pinata_api_key", "22adbce12b4314b7e08b");
+        myHeaders.append("pinata_secret_api_key", "1e746a0259982c83e47bb94e6b5295d546f006bbb8b8125173f4b5707c7d1756");
+        myHeaders.append("Content-Type", "application/json");
+
+    fetch("https://api.pinata.cloud/pinning/pinByHash", {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify({"hashToPin":_ipfsHash}),
+    })
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
+}

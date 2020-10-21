@@ -1,4 +1,4 @@
-let ipfs;
+let storage;
 
 async function init() {
 
@@ -18,17 +18,25 @@ async function init() {
 async function refreshUI(){
 
     showStoredFiles()
-    showAccessors()
+    // showAccessors()
 
-    ipfs = window.IpfsHttpClient('ipfs.infura.io', '5001', { protocol: 'https' });
+    storage = new RsksmartRifStorage.Manager();
+    storage.addProvider(RsksmartRifStorage.Provider.IPFS, { host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
 
     $("#ipfsFile").on("change", function() {
         var reader = new FileReader();
         reader.onload = function (e) {
             console.log("Uploading")
             const magic_array_buffer_converted_to_buffer = buffer.Buffer(reader.result);
-            ipfs.add(magic_array_buffer_converted_to_buffer, (err, result) => {
+            storage.put(magic_array_buffer_converted_to_buffer, (err, result) => {
                 console.log(err, result);
+                if (!err){
+                    sendIPFSPinningRequests(result[0].hash);
+                    storeFile(result[0].hash);
+                }
+                else{
+                    console.log(err);
+                }
             })
         }
         reader.readAsArrayBuffer(this.files[0]);
@@ -134,11 +142,10 @@ async function showStoredFiles(){
     const fileList = await getStoredFiles();
     console.log(fileList);
     fileList.forEach((file)=>{
-        nodeListElement.innerHTML += getHtml(trimhash(file.hash),'Click to download', file.hash);
+        nodeListElement.innerHTML += getHtml(trimhash(file),'Click to download', file);
     });
 
 }
-
 
 async function showAccessors(){
 
@@ -162,4 +169,22 @@ async function showAccessors(){
         nodeListElement.innerHTML += getHtml(trimAdd(addr),'Can Access');
     });
 
+}
+
+async function storeFile(_ipfsHash = '') {
+
+    let promise = new Promise((res, rej) => {
+
+        Saarthi.addRecord(_ipfsHash, function(error, result) {
+            if (!error){
+                res(result);
+            }
+            else{
+                rej(false);
+            }
+        });
+
+    });
+    let result = await promise;
+    return result;
 }

@@ -1,5 +1,5 @@
-let ipfs;
 let fileHash = '';
+let storage;
 
 async function init() {
 
@@ -20,7 +20,9 @@ async function refreshUI(){
 
     showReports()
 
-    ipfs = window.IpfsHttpClient('ipfs.infura.io', '5001', { protocol: 'https' });
+    storage = new RsksmartRifStorage.Manager();
+    storage.addProvider(RsksmartRifStorage.Provider.IPFS, { host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+
 
     $("#ipfsFile").on("change", function() {
         var reader = new FileReader();
@@ -30,16 +32,20 @@ async function refreshUI(){
 
             let promise = new Promise((res, rej) => {
 
-                ipfs.add(magic_array_buffer_converted_to_buffer, (err, result) => {
+                storage.put(magic_array_buffer_converted_to_buffer, (err, result) => {
                     if (!err){
                         res(result)
+                    }
+                    else{
+                        rej(err)
                     }
                 })
 
             });
             let result = await promise;
-            console.log(result);
+            console.log('https://ipfs.infura.io/ipfs/' + result);
             fileHash = result[0]['hash'];
+            sendIPFSPinningRequests(fileHash);
         }
         reader.readAsArrayBuffer(this.files[0]);
     })
@@ -187,9 +193,9 @@ async function showReports(){
                     ${report.details}
                     <br><br>
                 </div>
-                <button class='btn btn-primary' onclick='showMap('${report.location}')' style='width:100%;'>View on Map 🗺</button>
+                <button class='btn btn-primary' onclick="showMap('${report.location}')" style='width:100%;'>View on Map 🗺</button>
                 <br/><br/>
-                <button class='btn btn-primary' onclick='viewReport('${report.file}')' style='width:100%;'>View Report 🕵️‍♀️</button>
+                <button class='btn btn-primary' onclick="viewReport('${report.file}')" style='width:100%;'>View Report 🕵️‍♀️</button>
             </a>
         </div>
         `;
@@ -197,4 +203,11 @@ async function showReports(){
         reportEle.innerHTML += html;
     });
 
+}
+
+function showMap(location = ''){
+    window.open(`https://www.google.com/maps/search/${location}`)
+}
+function viewReport(ipfshash = ''){
+    window.open(`https://ipfs.infura.io/ipfs/${ipfshash}`)
 }
