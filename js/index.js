@@ -22,8 +22,8 @@ window.addEventListener('load', async () => {
           options: {
             key: "pk_test_391E26A3B43A3350",
             config: {
-              rpcUrl: 'https://betav2.matic.network',
-              chainId: 16110
+              rpcUrl: 'https://public-node.testnet.rsk.co/2.0.1',
+              chainId: 31
             }
 
           }
@@ -34,8 +34,8 @@ window.addEventListener('load', async () => {
           options: {
             config: {
               network: {
-                  host: "https://betav2.matic.network",
-                  chainId: 16110,
+                  host: "https://public-node.testnet.rsk.co/2.0.1",
+                  chainId: 31,
                   networkName: "Matic Network"
               },
               enableLogging: true,
@@ -72,11 +72,11 @@ window.addEventListener('load', async () => {
         })
 
         ethereum.on('chainChanged', function (netId) {
-            if(netId != 16110){
+            if(netId != 31){
                 Swal.fire({
                     icon: 'error',
                     title: 'Warning ⚠ - Wrong Network',
-                    html: `Please switch to https://betav2.matic.network`
+                    html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
                 });
             }
         })
@@ -98,11 +98,11 @@ window.addEventListener('load', async () => {
                 ethereum.autoRefreshOnNetworkChange=false;
 
                 web3.version.getNetwork((err, netId) => {
-                    if(netId != 16110){
+                    if(netId != 31){
                         Swal.fire({
                             icon: 'error',
                             title: 'Warning ⚠ - Wrong Network',
-                            html: `Please switch to https://betav2.matic.network`
+                            html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
                         });
                     }
                 });
@@ -125,11 +125,11 @@ window.addEventListener('load', async () => {
         console.log("Legacy Web3")
 
         web3.version.getNetwork((err, netId) => {
-            if(netId != 16110){
+            if(netId != 31){
                 Swal.fire({
                     icon: 'error',
                     title: 'Warning ⚠ - Wrong Network',
-                    html: `Please switch to https://betav2.matic.network`
+                    html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
                 });
             }
         });

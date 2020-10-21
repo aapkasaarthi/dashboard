@@ -7,7 +7,7 @@ async function init() {
     document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
 
     web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" ETH";
+        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
     })
     refreshUI();
 }
@@ -88,14 +88,14 @@ async function getCampaigns() {
                 <div class="col-md-4 mt-4"> \
                     <div class="card"> \
                         <div class="title title-3"> \
-                        <a target='_blank' href="https://betav2-explorer.matic.network/address/${userAddress}" > \
+                        <a target='_blank' href="https://explorer.testnet.rsk.co/address/${userAddress}" > \
                             ${trimAdd(userAddress)} \
                         </a> \
                         </div> \
                         <div class="card-text"> \
                             ${campaignData} \
                         </div> \
-                        <div class="title title-2">${billAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;">ETH</span></div> \
+                        <div class="title title-2">${billAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> RBTC</span></div> \
                         <div class="row form-group center" style="margin: 0 0 10px;"> \
                             <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id = "dA${userAddress}"> \
                         </div> \

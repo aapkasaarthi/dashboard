@@ -7,7 +7,7 @@ async function init() {
     document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
 
     web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" ETH";
+        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
     })
     refreshUI();
 }
@@ -60,8 +60,8 @@ async function getFundDetails() {
                             <div class="card-preview"> \
                                 <img class="card-pic" src="/img/funds/${fund.orgName}.jpg" alt="" style=" max-height: 100px; "> \
                             </div> \
-                            <div class="title title-2">${fund.donationAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;">ETH</span></div> \
-                            <div class="title title-4"><a target='_blank' href="https://betav2-explorer.matic.network/address/${fund.fundAddress}">${fund.orgName}<a></div> \
+                            <div class="title title-2">${fund.donationAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> RBTC</span></div> \
+                            <div class="title title-4"><a target='_blank' href="https://explorer.testnet.rsk.co/address/${fund.fundAddress}">${fund.orgName}<a></div> \
                             <div class="card-text">${fund.fundName}</div> \
                             <div class="row form-group center" style="margin: 0 0 10px;"> \
                                 <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id="donationAmount${fund.orgID}"> \

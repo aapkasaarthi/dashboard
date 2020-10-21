@@ -10,7 +10,7 @@ async function init() {
     document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
 
     web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" ETH";
+        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
     })
 
     refreshUI();
@@ -178,7 +178,7 @@ async function showReports(){
         let html = `
         <div class='card' style='margin: 30px;'>
             <div class='title title-4'>
-                <a target='_blank' href='https://betav2-explorer.matic.network/address/0xbeb71662ff9c08afef3866f85a6591d4aebe6e4e'>
+                <a target='_blank' href='https://explorer.testnet.rsk.co/address/0xbeb71662ff9c08afef3866f85a6591d4aebe6e4e'>
                     ${report.userName}
                 </a>
             </div>
