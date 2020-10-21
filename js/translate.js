@@ -52,9 +52,13 @@ async function translate(data="hello",to = "hi"){
 
 async function translatePage(_to = "hi"){
     let data = nativeTreeWalker();
+    let tcnt = 0;
     data.forEach(async (node)=>{
-        if (node.textContent.trim() != ''){
-            node.textContent = await translate(node.textContent.trim(), _to);
+        if (node.textContent.trim() !== '' && node.parentNode.classList.contains('skip-translate') === false){
+            translate(node.textContent.trim(), _to).then((translatedText)=>{
+                node.textContent = translatedText;
+            });
         }
     })
+    console.log(`Translated ${tcnt} Elements`)
 }
