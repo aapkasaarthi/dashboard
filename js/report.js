@@ -1,17 +1,13 @@
 let fileHash = '';
 let storage;
 
-async function init() {
+async function init(accounts) {
 
-    window.ethereum.on('accountsChanged', function (accounts) {
-        location.reload();
-    })
+    document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
-    document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
-
-    web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
+    web3.eth.getBalance(accounts[0], function(error, result) {
         document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
-    })
+    });
 
     refreshUI();
 }

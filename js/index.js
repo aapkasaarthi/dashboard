@@ -1,4 +1,3 @@
-let SaarthiContract = undefined;
 let Saarthi = undefined;
 
 const Web3Modal = window.Web3Modal.default;
@@ -10,10 +9,6 @@ let provider;
 let selectedAccount;
 
 window.addEventListener('load', async () => {
-
-    console.log("Initializing Providers...");
-    console.log("Fortmatic is", Fortmatic);
-    console.log("Torus is", Torus);
 
     const providerOptions = {
 
@@ -32,18 +27,18 @@ window.addEventListener('load', async () => {
         torus: {
           package: Torus,
           options: {
+            networkParams: {
+                host: "https://public-node.testnet.rsk.co/2.0.1",
+                chainId: 31,
+                networkId: 31,
+                networkName: "RSK Testnet"
+            },
+            network: "mainnet",
             config: {
-              network: {
-                  host: "https://public-node.testnet.rsk.co/2.0.1",
-                  chainId: 31,
-                  networkName: "Matic Network"
-              },
-              enableLogging: true,
-              buttonPosition: "bottom-left",
-              buildEnv: "production",
-              showTorusButton: true,
-              enabledVerifiers: {
-              }
+                enableLogging: true,
+                buttonPosition: "bottom-left",
+                buildEnv: "production",
+                showTorusButton: true,
             }
           }
         }
@@ -57,94 +52,67 @@ window.addEventListener('load', async () => {
 
     if (web3Modal.cachedProvider == "") {
         provider = await web3Modal.connect();
-        console.log("provider is");
-        console.log(provider);
+        console.log("provider is", provider);
     }
     else{
-        await web3Modal.connect();
+        provider = await web3Modal.connectTo(web3Modal.cachedProvider);
+        console.log("cached provider is", provider);
     }
 
-    if (typeof window.ethereum !== 'undefined') {
+    let accounts = [];
+    window.web3 = new Web3(provider);
 
+    if (web3.currentProvider.isMetaMask === true){
         ethereum.autoRefreshOnNetworkChange = false;
-        ethereum.on('accountsChanged', function (accounts) {
-            window.location.reload();
-        })
-
-        ethereum.on('chainChanged', function (netId) {
-            if(netId != 31){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Warning ⚠ - Wrong Network',
-                    html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
-                });
-            }
-        })
-
-        if (provider){
-            window.web3 = new Web3(provider);
-            console.log("set provider is")
-            console.log(provider)
-
-        }else{
-            window.web3 = new Web3(ethereum);
-            console.log("set provider is")
-            console.log(ethereum)
+        if (provider && provider.on){
+            provider.on('disconnect', ()=>{
+                window.location.reload()
+            });
+            provider.on('chainChanged', ()=>{
+                window.location.reload()
+            });
+            provider.on('accountsChanged', ()=>{
+                window.location.reload()
+            });
         }
 
-        try {
-                await ethereum.enable();
+        accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 
-                ethereum.autoRefreshOnNetworkChange=false;
-
-                web3.version.getNetwork((err, netId) => {
-                    if(netId != 31){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Warning ⚠ - Wrong Network',
-                            html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
-                        });
-                    }
-                });
-
-                SaarthiContract = web3.eth.contract(contractABI);
-                Saarthi = SaarthiContract.at(contractAddress);
-
-                await init();
-
-        } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'MetaMask Rejected'
-                });
+        let netId = parseInt(ethereum.chainId);
+        window.netId = netId;
+        if(netId != 31){
+            Swal.fire({
+                icon: 'error',
+                title: 'Warning ⚠ - Wrong Network',
+                html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
+            });
         }
 
-
-    } else if (window.web3) {
-
-        console.log("Legacy Web3")
-
-        web3.version.getNetwork((err, netId) => {
-            if(netId != 31){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Warning ⚠ - Wrong Network',
-                    html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
-                });
-            }
-        });
-        SaarthiContract = new web3.eth.contract(contractABI);
-        Saarthi = SaarthiContract.at(contractAddress);
-
-        init();
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'MetaMask Rejected',
-            html: `Get a Web3 Compatible Browser like MetaMask or TrustWallet`
-        });
     }
+    else if (web3.currentProvider.isFortmatic === true){
+        accounts = await web3.currentProvider.enable();
+    }
+    else if (web3.currentProvider.isTorus === true){
+        accounts = await web3.currentProvider.enable();
+    }
+    else {
+        accounts = await web3.currentProvider.enable();
+    }
+
+    Saarthi = web3.eth.contract(contractABI).at(contractAddress);
+    window.accounts = accounts;
+    init(accounts);
+
 });
+
+function getAddress(){
+    if (Boolean(web3.currentProvider.selectedAddress) === true){
+        return web3.currentProvider.selectedAddress;
+    }
+    else if(web3.currentProvider.isTrust){
+        return web3.currentProvider.address;
+    }
+}
 
 function format_two_digits(n) {return n < 10 ? '0' + n : n;}
 

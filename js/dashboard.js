@@ -1,17 +1,13 @@
-async function init() {
+async function init(accounts) {
 
-    window.ethereum.on('accountsChanged', function (accounts) {
-        location.reload();
-    })
+    document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
-    document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
-
-    web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
+    web3.eth.getBalance(accounts[0], function(error, result) {
         document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
-    })
+    });
 
     refreshUI();
-    setInterval(updateStats, 60000);
+    // setInterval(updateStats, 60000);
 }
 
 async function updateStats(){
@@ -25,13 +21,12 @@ async function updateStats(){
         document.getElementById('statCases').innerText = addCommas(data['cases']);
         document.getElementById('statDeaths').innerText = addCommas(data['deaths']);
         document.getElementById('statRecovered').innerText = addCommas(data['recovered']);
-        console.log(data);
     });
 
 }
 
 async function refreshUI(){
-    await updateStats();
+    updateStats();
 }
 
 function checkResult(event){
@@ -41,7 +36,6 @@ function checkResult(event){
     submitBtn.innerText = "Crunching Numbers";
     submitBtn.disabled = true;
 
-    var xhr = new XMLHttpRequest();
     let fever = parseInt(document.getElementById('fever').value);
     let feverDays = parseInt(document.getElementById('feverDays').value);
     let age = parseInt(document.getElementById('age').value);

@@ -1,16 +1,12 @@
 let storage;
 
-async function init() {
+async function init(accounts) {
 
-    window.ethereum.on('accountsChanged', function (accounts) {
-        location.reload();
-    })
+    document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
-    document.getElementById("userAddress").innerText = trimAdd(ethereum.selectedAddress);
-
-    web3.eth.getBalance(ethereum.selectedAddress, function(error, result) {
+    web3.eth.getBalance(accounts[0], function(error, result) {
         document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
-    })
+    });
 
     refreshUI();
 }
@@ -43,7 +39,7 @@ async function refreshUI(){
     })
 }
 
-async function getUserData(_userAddress = web3.eth.defaultAccount) {
+async function getUserData(_userAddress = getAddress()) {
 
     let promise = new Promise((res, rej) => {
 
@@ -70,7 +66,7 @@ async function getUserData(_userAddress = web3.eth.defaultAccount) {
     return dict;
 }
 
-async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount) {
+async function getStoredFile(_index = 0, _userAddress = getAddress()) {
 
     let promise = new Promise((res, rej) => {
 
@@ -87,7 +83,7 @@ async function getStoredFile(_index = 0, _userAddress = web3.eth.defaultAccount)
     return result;
 }
 
-async function getStoredFiles(_userAddress = web3.eth.defaultAccount) {
+async function getStoredFiles(_userAddress = getAddress()) {
 
     let promise = new Promise(async (res, rej) => {
 
