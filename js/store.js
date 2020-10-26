@@ -13,7 +13,9 @@ async function init(accounts) {
 
 async function refreshUI(){
 
-    showStoredFiles()
+    setup3Box(web3.currentProvider).then(()=>{
+        showStoredFiles();
+    });
     // showAccessors()
 
     storage = new RsksmartRifStorage.Manager();
@@ -29,6 +31,7 @@ async function refreshUI(){
                 if (!err){
                     sendIPFSPinningRequests(result[0].hash);
                     storeFile(result[0].hash);
+                    setTimeout(window.location.reload(), 5000);
                 }
                 else{
                     console.log(err);
@@ -38,6 +41,8 @@ async function refreshUI(){
         reader.readAsArrayBuffer(this.files[0]);
     })
 }
+
+/*
 
 async function getUserData(_userAddress = getAddress()) {
 
@@ -118,11 +123,13 @@ async function getAccessors() {
     return result;
 }
 
+*/
+
 async function showStoredFiles(){
 
     const getHtml = (title = "", text = "", data) => {
         return `
-        <a class='vacancy-item' href="https://gateway.ipfs.io/ipfs/${data}"> \
+        <a class='vacancy-item' href="https://ipfs.io/ipfs/${data}" target="blank"> \
         <div class='vacancy-title'>${title}</div> \
         <div class='vacancy-text'>${text}</div> \
         <div class='vacancy-arrow'> \
@@ -135,12 +142,12 @@ async function showStoredFiles(){
     };
 
     let nodeListElement = document.getElementById('fileList');
-    const fileList = await getStoredFiles();
+    const fileList = await space.private.get('files');
     console.log(fileList);
     fileList.forEach((file)=>{
         nodeListElement.innerHTML += getHtml(trimhash(file),'Click to download', file);
     });
-
+    document.querySelector('#tasksTitle').innerText = 'Here are your stored files.';
 }
 
 async function showAccessors(){
@@ -167,6 +174,9 @@ async function showAccessors(){
 
 }
 
+
+
+/*
 async function storeFile(_ipfsHash = '') {
 
     let promise = new Promise((res, rej) => {
@@ -184,3 +194,4 @@ async function storeFile(_ipfsHash = '') {
     let result = await promise;
     return result;
 }
+*/
