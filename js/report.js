@@ -50,7 +50,6 @@ async function refreshUI(){
 
 async function getLocation(){
 
-
     let promise = new Promise((res, rej) => {
         if (!navigator.geolocation){
             alert("No location Support");
@@ -90,16 +89,16 @@ async function pickupCurrent(){
     document.getElementById('location').value = `${latitude}, ${longitude}`;
 }
 
-
 async function submitReport() {
 
     let promise = new Promise((res, rej) => {
 
         let from = document.getElementById('from').value;
+        if (from.trim() === ''){
+            from = 'Anonymous';
+        }
         let location = document.getElementById('location').value;
         let details = document.getElementById('details').value;
-
-
         Saarthi.fileReport(from, location,fileHash , details, function(error, result) {
             if (!error)
                 res(result);
@@ -175,24 +174,26 @@ async function getReports() {
 async function showReports(){
 
     let reports = await getReports();
+    console.log(reports);
     let reportEle = document.getElementById('reportList');
     reports.forEach(report => {
         let html = `
-        <div class='card' style='margin: 30px;'>
-            <div class='title title-4'>
-                <a target='_blank' href='https://explorer.testnet.rsk.co/address/0xbeb71662ff9c08afef3866f85a6591d4aebe6e4e'>
+        <div class='card' style='margin: 30px;padding: 20px 20px'>
+            <div class="row" style="justify-content:space-around;padding-bottom :10px;">
+                <a target='_blank' href='https://explorer.testnet.rsk.co/address/${report.userAddress}'>
                     ${report.userName}
                 </a>
+                <a target='_blank' href='https://ipfs.infura.io/ipfs/${report.file}'>
+                    View Report 🕵️‍♀️
+                </a>
             </div>
-            <a>
-                <div class='card-text'>
-                    ${report.details}
-                    <br><br>
-                </div>
-                <button class='btn btn-primary' onclick="showMap('${report.location}')" style='width:100%;'>View on Map 🗺</button>
-                <br/><br/>
-                <button class='btn btn-primary' onclick="viewReport('${report.file}')" style='width:100%;'>View Report 🕵️‍♀️</button>
-            </a>
+            <div style="width: 100%">
+            <iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=18.5213,%2073.8523+(Incident%20Report)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+            </div>
+            <p>
+                ${report.details}
+                <br>
+            </p>
         </div>
         `;
 
@@ -203,7 +204,4 @@ async function showReports(){
 
 function showMap(location = ''){
     window.open(`https://www.google.com/maps/search/${location}`)
-}
-function viewReport(ipfshash = ''){
-    window.open(`https://ipfs.infura.io/ipfs/${ipfshash}`)
 }
