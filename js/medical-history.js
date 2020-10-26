@@ -63,7 +63,7 @@ async function getDonationAmount(_userAddress = getAddress()) {
             if (!error)
                 res(result);
             else{
-                rej(false);
+                res(['0']);
             }
         });
 

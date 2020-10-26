@@ -144,10 +144,15 @@ async function showStoredFiles(){
     let nodeListElement = document.getElementById('fileList');
     const fileList = await space.private.get('files');
     console.log(fileList);
-    fileList.forEach((file)=>{
-        nodeListElement.innerHTML += getHtml(trimhash(file),'Click to download', file);
-    });
-    document.querySelector('#tasksTitle').innerText = 'Here are your stored files.';
+    if (Boolean(fileList)===true){
+        fileList.forEach((file)=>{
+            nodeListElement.innerHTML += getHtml(trimhash(file),'Click to download', file);
+        });
+        document.querySelector('#tasksTitle').innerText = 'Here are your stored files.';
+    }
+    else {
+        document.querySelector('#tasksTitle').innerText = 'No files found.';
+    }
 }
 
 async function showAccessors(){
