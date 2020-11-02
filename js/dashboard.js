@@ -52,12 +52,33 @@ function checkResult(event){
         const prob = parseFloat(data['result']).toFixed(2);
 
         if (prob>=70){
-            Swal.fire({
-                icon: 'warning',
-                title: `Probability of Infection: ${prob}%`,
-                text: `There is a severe chance that you may have coronavirus.`,
-                footer: '<a target="_blank" href="https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf">Get Help 🥺</a>'
-              })
+            fetch('http://ip-api.com/json/')
+            .then(response => response.json())
+            .then(locData => {
+                Swal.fire({
+                    title: `Probability of Infection: 90%`,
+                    icon: 'warning',
+                    html: 'There is a severe chance that you may have coronavirus.',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    focusConfirm: true,
+                    confirmButtonText:'Call to Get Help',
+                    confirmButtonAriaLabel: 'Help',
+                    cancelButtonText:'Close',
+                    cancelButtonAriaLabel: 'Close'
+                }).then((result) => {
+                    if (result.value === true) {
+                        if(Object.keys(corona_helpline_numbers_india).includes(locData['region'])=== true){
+                            window.open(`tel:${corona_helpline_numbers_india[locData['region']]}`);
+                        }
+                        else{
+                            window.open(`tel:${corona_helpline_numbers_india['OT']}`);
+                        }
+                    }
+                })
+            });
+
+
         }
         else if (prob>=50){
             Swal.fire({

@@ -17,7 +17,7 @@ window.addEventListener('load', async () => {
           options: {
             key: "pk_test_391E26A3B43A3350",
             config: {
-              rpcUrl: 'https://public-node.testnet.rsk.co/2.0.1',
+              rpcUrl: 'https://public-node.testnet.rsk.co',
               chainId: 31
             }
 
@@ -28,7 +28,7 @@ window.addEventListener('load', async () => {
           package: Torus,
           options: {
             networkParams: {
-                host: "https://public-node.testnet.rsk.co/2.0.1",
+                host: "https://public-node.testnet.rsk.co",
                 chainId: 31,
                 networkId: 31,
                 networkName: "RSK Testnet"
@@ -84,7 +84,7 @@ window.addEventListener('load', async () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Warning ⚠ - Wrong Network',
-                html: `Please switch to https://public-node.testnet.rsk.co/2.0.1`
+                html: `Please switch to https://public-node.testnet.rsk.co`
             });
         }
 
@@ -195,4 +195,9 @@ function sendIPFSPinningRequests(_ipfsHash = ''){
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
 
+}
+
+
+function accountOnExp(_add = getAddress()){
+    window.open(`https://explorer.testnet.rsk.co/address/${_add}`)
 }
