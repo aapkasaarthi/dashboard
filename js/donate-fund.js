@@ -3,7 +3,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
     refreshUI();
 }
@@ -16,7 +16,7 @@ async function getFundCnt() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.fundCnt(function(error, result) {
+        Saarthi.methods.fundCnt().call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -36,7 +36,8 @@ async function getFundDetails() {
 
         const fundCnt = await getFundCnt();
         for (var i=0;i<fundCnt;i++){
-            Saarthi.Funds(i,function(error, result) {
+            Saarthi.methods.Funds(i.toString()).call((error, result)=>{
+                console.log(error, result);
                 if (!error){
 
                     let fund = {
@@ -44,7 +45,7 @@ async function getFundDetails() {
                         'orgName':result[1],
                         'fundName':result[2],
                         'fundAddress':result[3],
-                        'donationAmount':web3.fromWei(parseInt(result[4])),
+                        'donationAmount':web3.utils.fromWei(parseFloat(result[4]).toString()),
                         'donationCnt':parseInt(result[5]),
                     };
 
@@ -86,7 +87,7 @@ async function donate(_orgID) {
     let promise = new Promise((res, rej) => {
 
         let donationValue = parseFloat(document.getElementById(`donationAmount${_orgID}`).value);
-        Saarthi.donateToFund(parseInt(_orgID), {value: web3.toWei(donationValue, 'ether')},function(error, result) {
+        Saarthi.methods.donateToFund(parseInt(_orgID)).send({value: web3.utils.toWei(donationValue, 'ether')},function(error, result) {
             if (!error)
                 res(result);
             else{

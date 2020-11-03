@@ -99,7 +99,7 @@ window.addEventListener('load', async () => {
         accounts = await web3.currentProvider.enable();
     }
 
-    Saarthi = web3.eth.contract(contractABI).at(contractAddress);
+    Saarthi = new web3.eth.Contract(contractABI, contractAddress);
     window.accounts = accounts;
     init(accounts);
 

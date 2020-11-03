@@ -3,7 +3,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
     refreshUI();
 }
@@ -32,7 +32,7 @@ async function getUserData(_userAddress = getAddress()) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.Users(_userAddress, function(error, result) {
+        Saarthi.methods.Users(_userAddress).call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -45,7 +45,7 @@ async function getUserData(_userAddress = getAddress()) {
     let dict = {
         'userAddress':result[0],
         'recordHistoryCnt':parseInt(result[1]),
-        'billAmount':parseFloat(web3.fromWei(result[2])).toFixed(2),
+        'billAmount':parseFloat(web3.utils.fromWei(result[2])).toFixed(2),
         'donationCnt':parseInt(result[3]),
         'hasCampaign':result[4],
         'campaignData':result[5],
@@ -59,7 +59,7 @@ async function getDonationAmount(_userAddress = getAddress()) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.getDonationAmounts(_userAddress, function(error, result) {
+        Saarthi.methods.getDonationAmounts(_userAddress).call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -71,7 +71,7 @@ async function getDonationAmount(_userAddress = getAddress()) {
     let results = await promise;
     let sum = 0;
     results.forEach((amount) =>{
-        sum+= parseFloat(web3.fromWei(amount))
+        sum+= parseFloat(web3.utils.fromWei(amount))
     });
     return parseFloat(sum).toFixed(2);
 }
@@ -80,7 +80,7 @@ async function getStoredFile(_index = 0, _userAddress = getAddress()) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.getRecord(_userAddress, _index, function(error, result) {
+        Saarthi.methods.getRecord(_userAddress, _index).call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -109,7 +109,7 @@ async function startCampaign() {
 
     let promise = new Promise((res, rej) => {
         let data = document.getElementById('campDetails').value;
-        Saarthi.createCampaign(data, function(error, result) {
+        Saarthi.methods.createCampaign(data).send(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -127,7 +127,7 @@ async function stopCampaign() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.stopCampaign(function(error, result) {
+        Saarthi.methods.stopCampaign().send(function(error, result) {
             if (!error)
                 res(result);
             else{

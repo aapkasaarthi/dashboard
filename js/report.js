@@ -6,7 +6,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
 
     refreshUI();
@@ -99,7 +99,7 @@ async function submitReport() {
         }
         let location = document.getElementById('location').value;
         let details = document.getElementById('details').value;
-        Saarthi.fileReport(from, location,fileHash , details, function(error, result) {
+        Saarthi.methods.fileReport(from, location,fileHash , details).send(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -116,7 +116,7 @@ async function getReportCnt() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.reportCnt(function(error, result) {
+        Saarthi.methods.reportCnt().call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -133,7 +133,7 @@ async function getReport(_index = 0) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.Reports(_index, function(error, result) {
+        Saarthi.methods.Reports(_index).call(function(error, result) {
             if (!error)
                 res(result);
             else{

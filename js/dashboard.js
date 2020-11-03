@@ -3,7 +3,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
 
     refreshUI();
@@ -107,7 +107,7 @@ async function getDonationAmount(_orgID) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.totalDonationAmount((error, result)=>{
+        Saarthi.methods.totalDonationAmount().call((error, result)=>{
             if (!error)
                 res(result);
             else{
@@ -117,5 +117,5 @@ async function getDonationAmount(_orgID) {
 
     });
     let result = await promise;
-    return web3.fromWei(parseInt(result));
+    return web3.utils.fromWei(result);
 }

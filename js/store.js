@@ -5,7 +5,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
 
     refreshUI();
@@ -61,7 +61,7 @@ async function getUserData(_userAddress = getAddress()) {
     let dict = {
         'userAddress':result[0],
         'recordHistoryCnt':parseInt(result[1]),
-        'billAmount':parseFloat(web3.fromWei(result[2])).toFixed(2),
+        'billAmount':parseFloat(web3.utils.fromWei(result[2])).toFixed(2),
         'donationCnt':parseInt(result[3]),
         'hasCampaign':result[4],
         'campaignData':result[5],

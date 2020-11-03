@@ -3,7 +3,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.fromWei(result, "ether")).toFixed(2)+" RBTC";
+        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" RBTC";
     });
     refreshUI();
 }
@@ -16,7 +16,7 @@ async function getCampaignCnt() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.campaignCnt(function(error, result) {
+        Saarthi.methods.campaignCnt().call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -33,7 +33,7 @@ async function getCampaignAddress(_index = 0) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.Campaigns(_index, function(error, result) {
+        Saarthi.methods.Campaigns(_index).call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -50,7 +50,7 @@ async function getCampaign(_address = ethereum.selectedAddress) {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.Users(_address, function(error, result) {
+        Saarthi.methods.Users(_address).call(function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -62,7 +62,7 @@ async function getCampaign(_address = ethereum.selectedAddress) {
     let result = await promise;
     let dict = {
         userAddress : result[0],
-        billAmount: parseFloat(web3.fromWei(result[2])).toFixed(2),
+        billAmount: parseFloat(web3.utils.fromWei(result[2])).toFixed(3),
         donationCnt: parseInt(result[3]),
         hasCampaign: result[4],
         campaignData: result[5],
@@ -119,7 +119,7 @@ async function donate(_address) {
 
         let donationValueEle = document.getElementById(`dA${_address}`);
         let donationValue = parseFloat(donationValueEle.value);
-        Saarthi.donateToUser(_address, {value: web3.toWei(donationValue, 'ether')},function(error, result) {
+        Saarthi.methods.donateToUser(_address).send({value: web3.utils.toWei(donationValue, 'ether')},function(error, result) {
             if (!error)
                 res(result);
             else{
