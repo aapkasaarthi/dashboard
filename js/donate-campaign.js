@@ -119,7 +119,7 @@ async function donate(_address) {
 
         let donationValueEle = document.getElementById(`dA${_address}`);
         let donationValue = parseFloat(donationValueEle.value);
-        Saarthi.methods.donateToUser(_address).send({value: web3.utils.toWei(donationValue, 'ether')},function(error, result) {
+        Saarthi.methods.donateToUser(_address).send({from:getAddress(),value: web3.utils.toWei(donationValue, 'ether')},function(error, result) {
             if (!error)
                 res(result);
             else{

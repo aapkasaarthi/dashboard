@@ -44,7 +44,7 @@ async function enableResearch() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.methods.allowAccessToResearch().send(function(error, result) {
+        Saarthi.methods.allowAccessToResearch().send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -61,7 +61,7 @@ async function disableResearch() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.methods.revokeAccessToResearch().send(function(error, result) {
+        Saarthi.methods.revokeAccessToResearch().send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{

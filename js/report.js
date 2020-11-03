@@ -99,7 +99,7 @@ async function submitReport() {
         }
         let location = document.getElementById('location').value;
         let details = document.getElementById('details').value;
-        Saarthi.methods.fileReport(from, location,fileHash , details).send(function(error, result) {
+        Saarthi.methods.fileReport(from, location,fileHash , details).send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{

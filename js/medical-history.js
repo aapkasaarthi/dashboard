@@ -109,7 +109,7 @@ async function startCampaign() {
 
     let promise = new Promise((res, rej) => {
         let data = document.getElementById('campDetails').value;
-        Saarthi.methods.createCampaign(data).send(function(error, result) {
+        Saarthi.methods.createCampaign(data).send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{
@@ -127,7 +127,7 @@ async function stopCampaign() {
 
     let promise = new Promise((res, rej) => {
 
-        Saarthi.methods.stopCampaign().send(function(error, result) {
+        Saarthi.methods.stopCampaign().send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{
