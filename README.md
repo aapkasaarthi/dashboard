@@ -1,5 +1,5 @@
 # Aapka Saarthi - Dashboard
-🦠 A decentralized AI ecosystem leveraging blockchain technology to allow users to contibute computational resources, medical data and monetory relief directly to those in need.
+Aapka Saarthi (Your Friend) is A decentralized AI ecosystem leveraging blockchain technology to allow users to contibute computational resources, medical data and monetory relief directly to those in need.
 
 ## Active Deployments
 1. [saarthi.anudit.dev](https://saarthi.anudit.dev)
