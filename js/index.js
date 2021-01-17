@@ -16,24 +16,13 @@ window.addEventListener('load', async () => {
           package: Fortmatic,
           options: {
             key: "pk_test_391E26A3B43A3350",
-            config: {
-              rpcUrl: 'https://public-node.testnet.rsk.co',
-              chainId: 31
-            }
-
           }
         },
 
         torus: {
           package: Torus,
           options: {
-            networkParams: {
-                host: "https://public-node.testnet.rsk.co",
-                chainId: 31,
-                networkId: 31,
-                networkName: "RSK Testnet"
-            },
-            network: "mainnet",
+            network: "rinkeby",
             config: {
                 enableLogging: true,
                 buttonPosition: "bottom-left",
@@ -46,6 +35,7 @@ window.addEventListener('load', async () => {
 
     web3Modal = new Web3Modal({
         theme: "dark",
+        network: "rinkeby",
         cacheProvider: true,
         providerOptions,
     });
@@ -59,10 +49,10 @@ window.addEventListener('load', async () => {
         console.log("cached provider is", provider);
     }
 
-    let accounts = [];
-    window.web3 = new Web3(provider);
+    window.accounts = [];
+    window.web3 = new ethers.providers.Web3Provider(provider);
 
-    if (web3.currentProvider.isMetaMask === true){
+    if (web3.provider.isMetaMask === true){
         ethereum.autoRefreshOnNetworkChange = false;
         if (provider && provider.on){
             provider.on('disconnect', ()=>{
@@ -78,8 +68,7 @@ window.addEventListener('load', async () => {
 
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 
-        let netId = parseInt(ethereum.chainId);
-        window.netId = netId;
+        window.netId = parseInt(ethereum.chainId);
 
         if(Object.keys(supportedChains).includes(netId.toString()) === false){
             let alHtml = '<ul class="list-group list-group">';
@@ -98,33 +87,33 @@ window.addEventListener('load', async () => {
         }
 
     }
-    else if (web3.currentProvider.isFortmatic === true){
-        accounts = await web3.currentProvider.enable();
-        setupContracts(accounts, '31');
+    else if (web3.provider.isFortmatic === true){
+        accounts = await web3.provider.enable();
+        setupContracts(accounts, '4');
     }
-    else if (web3.currentProvider.isTorus === true){
-        accounts = await web3.currentProvider.enable();
-        setupContracts(accounts, '31');
+    else if (web3.provider.isTorus === true){
+        accounts = await web3.provider.enable();
+        setupContracts(accounts, '4');
     }
     else {
-        accounts = await web3.currentProvider.enable();
-        setupContracts(accounts, '31');
+        accounts = await web3.provider.enable();
+        setupContracts(accounts, '4');
     }
 
 });
 
 function setupContracts(accounts, netId){
-    Saarthi = new web3.eth.Contract(contractABI, contractAddress[netId])
+    Saarthi = new ethers.Contract(contractAddress[netId], contractABI, web3.getSigner());
     window.accounts = accounts;
     init(accounts);
 }
 
 function getAddress(){
-    if (Boolean(web3.currentProvider.selectedAddress) === true){
-        return web3.currentProvider.selectedAddress;
+    if (Boolean(web3.provider.selectedAddress) === true){
+        return web3.provider.selectedAddress;
     }
-    else if(web3.currentProvider.isTrust){
-        return web3.currentProvider.address;
+    else if(web3.provider.isTrust){
+        return web3.provider.address;
     }
 }
 
@@ -214,4 +203,40 @@ function sendIPFSPinningRequests(_ipfsHash = ''){
 
 function accountOnExp(_add = getAddress()){
     window.open(`https://explorer.testnet.rsk.co/address/${_add}`)
+}
+
+async function querySubgraph(query = '') {
+
+    let promise = new Promise((res, rej) => {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var graphql = JSON.stringify({
+        query: query
+        })
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: graphql,
+        redirect: 'follow'
+        };
+
+        fetch(graphqlEndpoint, requestOptions)
+        .then(response => response.json())
+        .then(result => res(result['data']))
+        .catch(error => {
+        console.log('error', error);
+        res({})
+        });
+
+    });
+    let result = await promise;
+    return result;
+
+}
+
+function cleanWei(bn, dec=2){
+    return parseFloat(ethers.utils.formatEther(bn)).toFixed(dec);
 }

@@ -1,35 +1,36 @@
-// check if touch device
 function isTouchDevice(){
-    var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
-    var mq = function(query) {
-      return window.matchMedia(query).matches;
-    }
-
-    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
-      return true;
-    }
-
-    // include the 'heartz' as a way to have a non matching MQ to help terminate the join
-    // https://git.io/vznFH
-    var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
-    return mq(query);
+  var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
+  var mq = function(query) {
+    return window.matchMedia(query).matches;
   }
 
-  // add class for body
-  if (isTouchDevice()) {
-    $('body').addClass('touch-device');
+  if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+    return true;
+  }
 
-    // navigation
-    $('.nav-link-drop').on('click', function(e){
-      e.preventDefault();
-      $(this).next().toggleClass('visible');
+  var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
+  return mq(query);
+}
+
+if (isTouchDevice()) {
+  document.body.addClass('touch-device');
+
+  // navigation
+  // document.querySelectorAll('.nav-link-drop').onclick= function(e){
+  //   e.preventDefault();
+  //   console.log('this!!')
+  //   $(this).next().toggleClass('visible');
+  // };
+}
+
+let accordionItem = document.querySelectorAll('.accordion-item');
+let accordionHead = document.querySelectorAll('.accordion-head');
+
+accordionItem.forEach((element) => {
+  element.onclick  = function(){
+    accordionItem.forEach((e) => {
+      e.classList.remove('active');
     });
+    element.classList.add('active');
   }
-
-  var accordionItem = $('.accordion-item'),
-      accordionHead = $('.accordion-head');
-
-  accordionHead.on('click', function(){
-    accordionItem.removeClass('active');
-    $(this).parent().addClass('active');
-  });
+});

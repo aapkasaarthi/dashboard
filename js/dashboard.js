@@ -1,17 +1,22 @@
 async function init(accounts) {
 
-    document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
+    document.querySelector("#userAddress").innerText = trimAdd(accounts[0]);
 
-    web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" ETH";
-    });
-
+    web3.getBalance(accounts[0]).then((balance)=>{
+        document.querySelector("#userBalance").innerText = cleanWei(balance)+" ETH";
+    })
     refreshUI();
-    // setInterval(updateStats, 60000);
+    setInterval(updateStats, 60000);
 }
 
-async function updateStats(){
-    document.getElementById('totDon').innerText = await getDonationAmount();
+async function refreshUI(){
+    updateStats();
+}
+
+async function updateStats() {
+    Saarthi.totalDonationAmount().then((amt)=>{
+        document.querySelector('#totDon').innerText = cleanWei(amt);
+    })
 
     fetch('https://corona.lmao.ninja/v2/countries/india')
     .then((response) => {
@@ -23,10 +28,6 @@ async function updateStats(){
         document.getElementById('statRecovered').innerText = addCommas(data['recovered']);
     });
 
-}
-
-async function refreshUI(){
-    updateStats();
 }
 
 function checkResult(event){
@@ -101,21 +102,4 @@ function checkResult(event){
         submitBtn.disabled = false;
     });
 
-}
-
-async function getDonationAmount(_orgID) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.totalDonationAmount().call((error, result)=>{
-            if (!error)
-                res(result);
-            else{
-                rej(0);
-            }
-        });
-
-    });
-    let result = await promise;
-    return web3.utils.fromWei(result);
 }

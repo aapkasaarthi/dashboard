@@ -2,9 +2,9 @@ async function init(accounts) {
 
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
-    web3.eth.getBalance(accounts[0], function(error, result) {
-        document.getElementById("userBalance").innerText = parseFloat(web3.utils.fromWei(result, "ether")).toFixed(2)+" ETH";
-    });
+    web3.getBalance(accounts[0]).then((balance)=>{
+        document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
+    })
     refreshUI();
 }
 
@@ -62,7 +62,7 @@ async function getCampaign(_address = ethereum.selectedAddress) {
     let result = await promise;
     let dict = {
         userAddress : result[0],
-        billAmount: parseFloat(web3.utils.fromWei(result[2])).toFixed(3),
+        billAmount: parseFloat(ethers.utils.formatEther(result[2])).toFixed(3),
         donationCnt: parseInt(result[3]),
         hasCampaign: result[4],
         campaignData: result[5],
