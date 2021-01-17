@@ -13,10 +13,10 @@ async function init(accounts) {
 
 async function refreshUI(){
 
-    setup3Box(web3.currentProvider).then(()=>{
+    showAccessors()
+    setup3Box(web3.provider).then(()=>{
         showStoredFiles();
     });
-    // showAccessors()
 
     storage = new RsksmartRifStorage.Manager();
     storage.addProvider(RsksmartRifStorage.Provider.IPFS, { host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
@@ -41,89 +41,6 @@ async function refreshUI(){
         reader.readAsArrayBuffer(this.files[0]);
     })
 }
-
-/*
-
-async function getUserData(_userAddress = getAddress()) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.Users(_userAddress, function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    let dict = {
-        'userAddress':result[0],
-        'recordHistoryCnt':parseInt(result[1]),
-        'billAmount':parseFloat(ethers.utils.formatEther(result[2])).toFixed(2),
-        'donationCnt':parseInt(result[3]),
-        'hasCampaign':result[4],
-        'campaignData':result[5],
-        'hasAllowedResearch':result[6],
-    }
-    console.log(dict);
-    return dict;
-}
-
-async function getStoredFile(_index = 0, _userAddress = getAddress()) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.getRecord(_userAddress, _index, function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
-}
-
-async function getStoredFiles(_userAddress = getAddress()) {
-
-    let promise = new Promise(async (res, rej) => {
-
-        const userData = await getUserData(_userAddress);
-        const fileCnt = userData['recordHistoryCnt'];
-        let resp = [];
-        for (var i=0;i<fileCnt;i++){
-            let data = await getStoredFile(i);
-            resp.push(data);
-        }
-        res(resp);
-
-    });
-    let result = await promise;
-    return result;
-}
-
-async function getAccessors() {
-
-    let promise = new Promise(async (res, rej) => {
-
-        Saarthi.getAccessors(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
-}
-
-*/
 
 async function showStoredFiles(){
 
@@ -156,11 +73,18 @@ async function showStoredFiles(){
 }
 
 async function showAccessors(){
+    let query = `
+    {
+        approvals(where: {from:"0x707ac3937a9b31c225d8c240f5917be97cab9f20", state:true}) {
+          to
+        }
+      }
+    `;
 
-    const getHtml = (title = "", text = "") => {
+    const getHtml = (add = "", text = "") => {
         return `
-        <a class='vacancy-item' href="#"> \
-        <div class='vacancy-title'>${title}</div> \
+        <a class='vacancy-item' onclick="openInExplorer('${add}')"> \
+        <div class='vacancy-title'>${trimAdd(add)}</div> \
         <div class='vacancy-text'>${text}</div> \
         <div class='vacancy-arrow'> \
         <svg xmlns='http://www.w3.org/2000/svg' width='8' height='12' viewBox='0 0 8 12'> \
@@ -171,32 +95,14 @@ async function showAccessors(){
         `
     };
 
-    let nodeListElement = document.getElementById('allowed');
-    const addresses = await getAccessors();
-    addresses.forEach((addr)=>{
-        nodeListElement.innerHTML += getHtml(trimAdd(addr),'Can Access');
-    });
-
-}
-
-
-
-/*
-async function storeFile(_ipfsHash = '') {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.addRecord(_ipfsHash, function(error, result) {
-            if (!error){
-                res(result);
-            }
-            else{
-                rej(false);
-            }
+    querySubgraph(query).then((response)=>{
+        console.log(response);
+        response.approvals.forEach(approval => {
+            document.querySelector('#allowed').innerHTML += getHtml(approval.to,'Can Access');;
         });
-
-    });
-    let result = await promise;
-    return result;
+    })
+    .catch((err)=>{
+        // console.error(err);
+        handleError(err);
+    })
 }
-*/
