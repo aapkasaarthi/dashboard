@@ -12,24 +12,6 @@ async function refreshUI(){
     setupFunds();
 };
 
-async function getFundCnt() {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.fundCnt().call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return parseInt(result);
-}
-
-
 async function setupFunds() {
 
     let query = `
@@ -65,7 +47,8 @@ async function setupFunds() {
         });
     })
     .catch((err)=>{
-        console.error(err);
+        // console.error(err);
+        handleError(err);
     })
 
 }
@@ -78,9 +61,7 @@ function donate(_orgID) {
     }
     else {
         Saarthi.donateToFund(parseInt(_orgID).toString(), {
-            value:ethers.utils.parseEther(
-                document.querySelector(`#donationAmount${_orgID}`).value
-            )
+            value:ethers.utils.parseEther(val)
         })
         .then((txnHash)=>{
             // TODO: Track Transaction status

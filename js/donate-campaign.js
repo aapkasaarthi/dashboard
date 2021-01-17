@@ -1,131 +1,78 @@
 async function init(accounts) {
+    refreshUI();
 
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.getBalance(accounts[0]).then((balance)=>{
         document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
     })
-    refreshUI();
 }
 
 async function refreshUI(){
-    getCampaigns();
+    setupCampaigns();
 };
 
-async function getCampaignCnt() {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.campaignCnt().call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
+async function setupCampaigns(){
+    let query = `
+    {
+        campaigns {
+            campaigner
+              campaignEnabled
+            donationCount
+            amountReceived
+            campaignHistory {
+                campaignData
             }
-        });
-
-    });
-    let result = await promise;
-    return parseInt(result);
-}
-
-async function getCampaignAddress(_index = 0) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.Campaigns(_index).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
-}
-
-async function getCampaign(_address = ethereum.selectedAddress) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.Users(_address).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    let dict = {
-        userAddress : result[0],
-        billAmount: parseFloat(ethers.utils.formatEther(result[2])).toFixed(3),
-        donationCnt: parseInt(result[3]),
-        hasCampaign: result[4],
-        campaignData: result[5],
+        }
     }
-    return dict;
-}
+    `;
 
-
-async function getCampaigns() {
-
-    let promise = new Promise(async (res, rej) => {
-
-        const campaignCnt = await getCampaignCnt();
-        for (var i=0;i<campaignCnt;i++){
-            let {userAddress, billAmount, donationCnt, hasCampaign, campaignData} = await getCampaign(await getCampaignAddress(i));
-
-            if (userAddress != "0x0000000000000000000000000000000000000000"){
-                document.getElementById('CampaignList').innerHTML += `\
-                <div class="col-md-4 mt-4"> \
-                    <div class="card"> \
-                        <div class="title title-3"> \
-                        <a target='_blank' href="https://explorer.testnet.rsk.co/address/${userAddress}" > \
-                            ${trimAdd(userAddress)} \
-                        </a> \
-                        </div> \
-                        <div class="card-text"> \
-                            ${campaignData} \
-                        </div> \
-                        <div class="title title-2">${billAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> ETH</span></div> \
-                        <div class="row form-group center" style="margin: 0 0 10px;"> \
-                            <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id = "dA${userAddress}"> \
-                        </div> \
-                        <button class="btn btn-primary" onclick="donate('${userAddress}')">Donate ❤️</button> \
-                    </div> \
+    querySubgraph(query).then((response)=>{
+        console.log(response);
+        response.campaigns.forEach(campaign => {
+            if (campaign.campaignEnabled == true){
+                document.getElementById('CampaignList').innerHTML += `
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="title title-3">
+                        <a target='_blank' href="${chainExplorers['netId']}/address/${campaign.campaigner}" >
+                            ${trimAdd(campaign.campaigner)}
+                        </a>
+                        </div>
+                        <div class="card-text">
+                            ${campaign.campaignHistory[0].campaignData}
+                        </div>
+                        <div class="title title-2">${cleanWei(campaign.amountReceived)} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> ETH</span></div>
+                        <div class="row form-group center" style="margin: 0 0 10px;">
+                            <input class="form-control" type="number" placeholder="Amount 💰 (in ETH)" required="" id = "dA${campaign.campaigner}">
+                        </div>
+                        <button class="btn btn-primary" onclick="donate('${campaign.campaigner}')">Donate ❤️</button>
+                    </div>
                 </div>`;
             }
-
-        }
-
-        res(true);
-
-    });
-
-    let result = await promise;
-    return result;
-
+        });
+    })
+    .catch((err)=>{
+        // console.error(err);
+        handleError(err);
+    })
 }
 
 async function donate(_address) {
 
-    let promise = new Promise((res, rej) => {
-
-        let donationValueEle = document.getElementById(`dA${_address}`);
-        let donationValue = parseFloat(donationValueEle.value);
-        Saarthi.methods.donateToUser(_address).send({from:getAddress(),value: web3.utils.toWei(donationValue.toString(), 'ether')},function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(error);
-            }
+    let val = document.querySelector(`#dA${_address}`).value;
+    if (val == "" || parseFloat(val) == 0) {
+        handleError("Invalid Amount");
+    }
+    else {
+        Saarthi.donateToCampaign(_address, {
+            value:ethers.utils.parseEther(val)
+        })
+        .then((txnHash)=>{
+            // TODO: Track Transaction status
+        })
+        .catch((err)=>{
+            handleError(err);
         });
-
-    });
-    let result = await promise;
-    return parseInt(result);
+    }
 }
