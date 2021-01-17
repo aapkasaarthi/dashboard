@@ -1,15 +1,15 @@
 async function init(accounts) {
+    refreshUI();
 
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.getBalance(accounts[0]).then((balance)=>{
         document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
     })
-    refreshUI();
 }
 
 async function refreshUI(){
-    getFundDetails();
+    setupFunds();
 };
 
 async function getFundCnt() {
@@ -30,72 +30,64 @@ async function getFundCnt() {
 }
 
 
-async function getFundDetails() {
+async function setupFunds() {
 
-    let promise = new Promise(async (res, rej) => {
-
-        const fundCnt = await getFundCnt();
-        for (var i=0;i<fundCnt;i++){
-            Saarthi.methods.Funds(i.toString()).call((error, result)=>{
-                console.log(error, result);
-                if (!error){
-
-                    let fund = {
-                        'orgID':parseInt(result[0]),
-                        'orgName':result[1],
-                        'fundName':result[2],
-                        'fundAddress':result[3],
-                        'donationAmount':ethers.utils.formatEther(parseFloat(result[4]).toString()),
-                        'donationCnt':parseInt(result[5]),
-                    };
-
-                    if(fund.fundName.length <= 23)
-                        fund.fundName+="<br/><br/>"
-
-                    document.getElementById('fundList').innerHTML += `<div class="col-md-4 mt-4"> \
-                        <div class="card"> \
-                            <div class="card-preview"> \
-                                <img class="card-pic" src="/img/funds/${fund.orgName}.jpg" alt="" style=" max-height: 100px; "> \
-                            </div> \
-                            <div class="title title-2">${fund.donationAmount} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> ETH</span></div> \
-                            <div class="title title-4"><a target='_blank' href="https://explorer.testnet.rsk.co/address/${fund.fundAddress}">${fund.orgName}<a></div> \
-                            <div class="card-text">${fund.fundName}</div> \
-                            <div class="row form-group center" style="margin: 0 0 10px;"> \
-                                <input class="form-control" type="number" placeholder="Donation Amount 💰" required="" id="donationAmount${fund.orgID}"> \
-                            </div> \
-                            <button class="btn btn-primary" onclick="donate(${fund.orgID})" style="width:100%;">Donate ❤️</button> \
-                        </div> \
-                    </div>`;
-
-                }
-                else{
-                    rej(false);
-                }
-            });
+    let query = `
+    {
+        funds {
+          paymentReceiver
+          fundIndex
+          orgName
+          fundName
+          amountReceived
         }
-        res(true);
+    }
+    `;
 
-    });
+    querySubgraph(query).then((response)=>{
+        console.log(response);
+        response.funds.forEach(fund => {
 
-    let result = await promise;
-    return result;
+            document.getElementById('fundList').innerHTML += `<div class="col-md-4 mt-4"> \
+                <div class="card"> \
+                    <div class="card-preview"> \
+                        <img class="card-pic" src="/img/funds/${fund.orgName}.jpg" alt="" style=" max-height: 100px; "> \
+                    </div> \
+                    <div class="title title-2">${cleanWei(fund.amountReceived)} <span class="text-sm" style="margin-top:0;margin-bottom:0;"> ETH</span></div> \
+                    <div class="title title-4"><a target='_blank' href="${chainExplorers[netId]}/address/${fund.paymentReceiver}">${fund.orgName}<a></div> \
+                    <div class="card-text">${fund.fundName}</div> \
+                    <div class="row form-group center" style="margin: 0 0 10px;"> \
+                        <input class="form-control" type="number" placeholder="Amount 💰 (in ETH)" required="" id="donationAmount${fund.fundIndex}"> \
+                    </div> \
+                    <button class="btn btn-primary" onclick="donate(${fund.fundIndex})" style="width:100%;">Donate ❤️</button> \
+                </div> \
+            </div>`;
+        });
+    })
+    .catch((err)=>{
+        console.error(err);
+    })
 
 }
 
-async function donate(_orgID) {
+function donate(_orgID) {
 
-    let promise = new Promise((res, rej) => {
-
-        let donationValue = parseFloat(document.getElementById(`donationAmount${_orgID}`).value);
-        Saarthi.methods.donateToFund(parseInt(_orgID).toString()).send({from:getAddress(),value: web3.utils.toWei(donationValue.toString(), 'ether')},function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
+    let val = document.querySelector(`#donationAmount${_orgID}`).value;
+    if (val == "" || parseFloat(val) == 0) {
+        handleError("Invalid Amount");
+    }
+    else {
+        Saarthi.donateToFund(parseInt(_orgID).toString(), {
+            value:ethers.utils.parseEther(
+                document.querySelector(`#donationAmount${_orgID}`).value
+            )
+        })
+        .then((txnHash)=>{
+            // TODO: Track Transaction status
+        })
+        .catch((err)=>{
+            handleError(err);
         });
+    }
 
-    });
-    let result = await promise;
-    return parseInt(result);
 }

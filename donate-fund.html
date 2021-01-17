@@ -237,14 +237,14 @@
         <div class="section" style="background: #f8ebee;color: #0c3934;">
             <div class="container">
                 <div>
-                  <div class="title title-2" style="text-align: center;">Available Funds</div>
+                  <div class="title title-2" style="text-align: center;">Donate to a Fund</div>
                   <div class="sub-title title-4" style="width: 100%; text-align: left;">
                     The world is facing an unprecedented challenge with communities and economies everywhere affected by the growing COVID-19 pandemic.
                     The outpouring of global solidarity and support sparked by this shared challenge has been phenomenal.
                   </div>
                   <br/>
                   <div class="text-center">
-                    <a class="btn btn-primary" href="https://explorer.testnet.rsk.co/address/0x7a6a4cdf2136647902990bfd1e8ff03709ed2102?__ctab=general&__tab=events" target="_blank">
+                    <a class="btn btn-primary" onclick="openInExplorer('0x7a6a4cdf2136647902990bfd1e8ff03709ed2102')" target="_blank">
                       Track your Donations
                     </a>
                   </div>
@@ -272,7 +272,7 @@
     </div>
 
 
-      <script src="js/lib/web3@1.3.0.js"></script>
+      <script src="js/lib/ethers@5.0.26.min.js"></script>
       <script src="js/lib/jquery-3.5.1.slim.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/lib/sweetalert2@9.js"></script>

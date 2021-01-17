@@ -201,8 +201,8 @@ function sendIPFSPinningRequests(_ipfsHash = ''){
 }
 
 
-function accountOnExp(_add = getAddress()){
-    window.open(`https://explorer.testnet.rsk.co/address/${_add}`)
+function openInExplorer(_add = getAddress()){
+    window.open(`${chainExplorers[netId]}/address/${_add}`)
 }
 
 async function querySubgraph(query = '') {
@@ -239,4 +239,21 @@ async function querySubgraph(query = '') {
 
 function cleanWei(bn, dec=2){
     return parseFloat(ethers.utils.formatEther(bn)).toFixed(dec);
+}
+
+function handleError(err){
+    if (Boolean(err.message) === true){
+        Swal.fire({
+            icon: 'error',
+            title: `Error`,
+            text: err.message
+        })
+    }
+    else {
+        Swal.fire({
+            icon: 'error',
+            title: `Error`,
+            text: err
+        })
+    }
 }
