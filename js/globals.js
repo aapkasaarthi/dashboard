@@ -65,3 +65,4 @@ const corona_helpline_numbers_india = {
 }
 
 let graphqlEndpoint = "https://api.thegraph.com/subgraphs/name/anudit/saarthi";
+let RESEARCH_ADDRESS = "0x707aC3937A9B31C225D8C240F5917Be97cab9F20";

@@ -1,93 +1,55 @@
 async function init(accounts) {
+    refreshUI();
 
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.getBalance(accounts[0]).then((balance)=>{
         document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
     })
-    refreshUI();
 }
 
 async function refreshUI(){
     await updateStatus();
 };
 
+async function updateStatus(){
+    let query = `
+    {
+        approvals(where: {from:"${getAddress()}", to:"${RESEARCH_ADDRESS}", state:true}) {
+          state
+        }
+      }
+    `;
 
-async function getUserData(_userAddress = getAddress()) {
+    querySubgraph(query).then((response)=>{
+        console.log(response);
 
-    let promise = new Promise((res, rej) => {
+        let btn = document.getElementById('status');
+        btn.addEventListener("click", toggleApproval);
 
-        Saarthi.methods.Users(_userAddress).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    let dict = {
-        'userAddress':result[0],
-        'recordHistoryCnt':parseInt(result[1]),
-        'billAmount':parseFloat(ethers.utils.formatEther(result[2])).toFixed(2),
-        'donationCnt':parseInt(result[3]),
-        'hasCampaign':result[4],
-        'campaignData':result[5],
-        'hasAllowedResearch':result[6],
-    }
-    // console.log(dict);
-    return dict;
+        let details = document.getElementById('statusDetails');
+        if (response.approvals.length != 0){
+            btn.innerText = "Opt Out ❌"
+            details.innerText = "Thank you for helping those in need by contributing your data towards Research and Development 🎓"
+        }
+        else {
+            btn.innerText = "Opt In 💪"
+            details.innerText = "Help those in need by contributing your data towards Research and Development 🎓"
+        }
+    })
+    .catch((err)=>{
+        // console.error(err);
+        handleError(err);
+    })
 }
 
-async function enableResearch() {
+function toggleApproval() {
 
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.allowAccessToResearch().send({from:getAddress()},function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
+    Saarthi.toggleAccessToAddress(getAddress())
+    .then((txnHash)=>{
+        // TODO: Track Transaction status
+    })
+    .catch((err)=>{
+        handleError(err);
     });
-    let result = await promise;
-    return result;
-}
-
-async function disableResearch() {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.revokeAccessToResearch().send({from:getAddress()},function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
-}
-
-
-async function updateStatus() {
-
-    let btn = document.getElementById('status');
-    let details = document.getElementById('statusDetails');
-    let {hasAllowedResearch} = await getUserData();
-    if (hasAllowedResearch == true){
-        btn.innerText = "Opt Out ❌"
-        btn.addEventListener("click", disableResearch);
-        details.innerText = "Thank you for helping those in need by contributing your data towards Research and Development 🎓"
-    }
-    else {
-        btn.innerText = "Opt In 💪"
-        btn.addEventListener("click", enableResearch);
-        details.innerText = "Help those in need by contributing your data towards Research and Development 🎓"
-    }
 }
