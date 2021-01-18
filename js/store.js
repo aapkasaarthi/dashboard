@@ -18,20 +18,19 @@ async function refreshUI(){
         showStoredFiles();
     });
 
-    storage = new RsksmartRifStorage.Manager();
-    storage.addProvider(RsksmartRifStorage.Provider.IPFS, { host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+    storage = IpfsHttpClientLite({apiUrl: 'https://ipfs.infura.io:5001'})
 
     $("#ipfsFile").on("change", function() {
         var reader = new FileReader();
         reader.onload = function (e) {
             console.log("Uploading")
             const magic_array_buffer_converted_to_buffer = buffer.Buffer(reader.result);
-            storage.put(magic_array_buffer_converted_to_buffer, (err, result) => {
+            storage.add(magic_array_buffer_converted_to_buffer, (err, result) => {
                 console.log(err, result);
                 if (!err){
                     sendIPFSPinningRequests(result[0].hash);
                     storeFile(result[0].hash);
-                    setTimeout(window.location.reload(), 5000);
+                    // setTimeout(window.location.reload, 20000);
                 }
                 else{
                     console.log(err);
