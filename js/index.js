@@ -2,7 +2,7 @@ let Saarthi = undefined;
 
 const Web3Modal = window.Web3Modal.default;
 const Fortmatic = window.Fortmatic;
-const Torus = window.torus;
+const Torus = window.Torus;
 
 let web3Modal
 let provider;
