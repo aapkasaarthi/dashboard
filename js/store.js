@@ -24,6 +24,7 @@ async function refreshUI(){
         var reader = new FileReader();
         reader.onload = function (e) {
             console.log("Uploading")
+            await injectScript('./js/lib/buffer@5.2.1.js');
             const magic_array_buffer_converted_to_buffer = buffer.Buffer(reader.result);
             storage.add(magic_array_buffer_converted_to_buffer, (err, result) => {
                 console.log(err, result);

@@ -4,8 +4,13 @@ self.addEventListener('install', function(event) {
       return cache.addAll([
         '/index.html',
         '/dashboard.html',
-        '/listnodes.html',
-        '/tasks.html'
+        '/contribute-research.html',
+        '/contributors.html',
+        '/donate-campaign.html',
+        '/donate-fund.html',
+        '/medical-history.html',
+        '/reports.html',
+        '/store.html'
       ]);
     })
   );
