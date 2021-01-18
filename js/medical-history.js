@@ -1,96 +1,54 @@
 async function init(accounts) {
+    refreshUI();
 
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.getBalance(accounts[0]).then((balance)=>{
-        document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
+        document.querySelector("#userBalance").innerText = cleanWei(balance)+" ETH";
     })
-    refreshUI();
 }
 
 async function refreshUI(){
     showQR();
-
-    let {billAmount, hasCampaign} = await getUserData();
-    document.getElementById("medicalDues").innerText = billAmount;
-    let donationAmt = await getDonationAmount();
-    document.getElementById("donationsReceived").innerText = donationAmt;
-    if (hasCampaign == true){
-        document.getElementById("campaignStatus").innerHTML = "Enabled"
-        document.getElementById("campDetails").remove()
-        document.getElementById("campStart").remove()
-    }
-    else{
-        document.getElementById("campaignStatus").innerHTML = "Disabled"
-        document.getElementById("campStop").remove()
-    }
-
+    setupUI();
 };
 
+async function setupUI() {
 
-async function getUserData(_userAddress = getAddress()) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.Users(_userAddress).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    let dict = {
-        'userAddress':result[0],
-        'recordHistoryCnt':parseInt(result[1]),
-        'billAmount':parseFloat(ethers.utils.formatEther(result[2])).toFixed(2),
-        'donationCnt':parseInt(result[3]),
-        'hasCampaign':result[4],
-        'campaignData':result[5],
-        'hasAllowedResearch':result[6],
+    let query = `
+    {
+        userHospitalBills (where: {id: "${getAddress()}"}){
+            totalBilledAmount
+            billsCount
+        },
+        campaigns(where:{campaigner:"${getAddress()}"}) {
+            campaignEnabled
+            amountReceived
+        }
     }
-    // console.log(dict);
-    return dict;
-}
+    `;
 
-async function getDonationAmount(_userAddress = getAddress()) {
+    querySubgraph(query).then((response)=>{
+        console.log(response);
 
-    let promise = new Promise((res, rej) => {
+        document.getElementById("medicalDues").innerText = cleanWei(response.userHospitalBills[0]?.totalBilledAmount);
 
-        Saarthi.methods.getDonationAmounts(_userAddress).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                res(['0']);
-            }
-        });
+        document.getElementById("donationsReceived").innerText = cleanWei(response.campaigns[0].amountReceived);
+        if (response.campaigns[0].campaignEnabled == true){
+            document.getElementById("campaignStatus").innerHTML = "Enabled"
+            document.getElementById("campDetails").remove()
+            document.getElementById("campStart").remove()
+        }
+        else{
+            document.getElementById("campaignStatus").innerHTML = "Disabled"
+            document.getElementById("campStop").remove()
+        }
+    })
+    .catch((err)=>{
+        // console.error(err);
+        handleError(err);
+    })
 
-    });
-    let results = await promise;
-    let sum = 0;
-    results.forEach((amount) =>{
-        sum+= parseFloat(ethers.utils.formatEther(amount))
-    });
-    return parseFloat(sum).toFixed(2);
-}
-
-async function getStoredFile(_index = 0, _userAddress = getAddress()) {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.getRecord(_userAddress, _index).call(function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(false);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
 }
 
 async function showQR(){
@@ -104,30 +62,38 @@ async function showQR(){
     });
 }
 
+async function getBytes32FromIpfsHash(ipfsListing) {
 
-async function startCampaign() {
+    await injectScript('./js/lib/bs58.bundle.js');
+    return "0x" + bs58.decode(ipfsListing).slice(2).toString('hex')
+
+}
+
+async function startCampaign(){
+    Saarthi.startCampaign(await getBytes32FromIpfsHash('QmR3VgpgJcGJZX4iazxBcvn2G7jHktLCdozaWF6Hp8DLLH'))
+    .then((txnHash)=>{
+        // TODO: Track Transaction status
+    })
+    .catch((err)=>{
+        handleError(err);
+    });
+}
+
+function stopCampaign(){
+    Saarthi.stopCampaign()
+    .then((txnHash)=>{
+        // TODO: Track Transaction status
+    })
+    .catch((err)=>{
+        handleError(err);
+    });
+}
+
+async function toggleCampaign() {
 
     let promise = new Promise((res, rej) => {
         let data = document.getElementById('campDetails').value;
         Saarthi.methods.createCampaign(data).send({from:getAddress()},function(error, result) {
-            if (!error)
-                res(result);
-            else{
-                rej(error);
-            }
-        });
-
-    });
-    let result = await promise;
-    return result;
-}
-
-
-async function stopCampaign() {
-
-    let promise = new Promise((res, rej) => {
-
-        Saarthi.methods.stopCampaign().send({from:getAddress()},function(error, result) {
             if (!error)
                 res(result);
             else{

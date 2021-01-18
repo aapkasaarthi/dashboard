@@ -4,7 +4,7 @@ async function init(accounts) {
     document.getElementById("userAddress").innerText = trimAdd(accounts[0]);
 
     web3.getBalance(accounts[0]).then((balance)=>{
-        document.querySelector("#userBalance").innerText = parseFloat(ethers.utils.formatEther(balance)).toFixed(2)+" ETH";
+        document.querySelector("#userBalance").innerText = cleanWei(balance)+" ETH";
     })
 }
 

@@ -238,7 +238,12 @@ async function querySubgraph(query = '') {
 }
 
 function cleanWei(bn, dec=2){
-    return parseFloat(ethers.utils.formatEther(bn)).toFixed(dec);
+    if (bn!=undefined){
+        return parseFloat(ethers.utils.formatEther(bn)).toFixed(dec);
+    }
+    else {
+        return "0"
+    }
 }
 
 function handleError(err){
