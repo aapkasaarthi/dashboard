@@ -20,9 +20,9 @@ async function refreshUI(){
 
     storage = IpfsHttpClientLite({apiUrl: 'https://ipfs.infura.io:5001'})
 
-    $("#ipfsFile").on("change", function() {
+    $("#ipfsFile").on("change", async function() {
         var reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = async function (e) {
             console.log("Uploading")
             await injectScript('./js/lib/buffer@5.2.1.js');
             const magic_array_buffer_converted_to_buffer = buffer.Buffer(reader.result);
